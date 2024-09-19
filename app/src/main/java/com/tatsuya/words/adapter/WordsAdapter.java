@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -56,12 +55,24 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.WordsViewHol
         } else {
             itemView = layoutInflater.inflate(R.layout.cell_word_normal2, parent, false);
         }
-        WordsViewHolder wordsViewHolder = new WordsViewHolder(itemView);
+        final WordsViewHolder wordsViewHolder = new WordsViewHolder(itemView);
         wordsViewHolder.itemView.setOnClickListener(v -> {
             Uri uri = Uri.parse("https://dict.youdao.com/result?word=" + wordsViewHolder.textView_english.getText() + "&lang=en");
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(uri);
             wordsViewHolder.itemView.getContext().startActivity(intent);
+        });
+        wordsViewHolder.switch_chinese_invisible.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Word word = (Word) wordsViewHolder.itemView.getTag(R.id.word_for_view_holder);
+            if (isChecked) {
+                wordsViewHolder.textView_chinese.setVisibility(View.GONE);
+                word.setChineseInvisible(true);
+                wordViewModel.updateWords(word);
+            } else {
+                wordsViewHolder.textView_chinese.setVisibility(View.VISIBLE);
+                word.setChineseInvisible(false);
+                wordViewModel.updateWords(word);
+            }
         });
         return wordsViewHolder;
     }
@@ -69,10 +80,10 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.WordsViewHol
     @Override
     public void onBindViewHolder(@NonNull WordsViewHolder holder, int position) {
         Word word = allWords.get(position);
+        holder.itemView.setTag(R.id.word_for_view_holder, word);
         holder.textView_number.setText(String.valueOf(position + 1));
         holder.textView_english.setText(word.getEnglish());
         holder.textView_chinese.setText(word.getChineseMeaning());
-        holder.switch_chinese_invisible.setOnCheckedChangeListener(null);
         if (word.getChineseInvisible()) {
             holder.textView_chinese.setVisibility(View.GONE);
             holder.switch_chinese_invisible.setChecked(true);
@@ -80,17 +91,6 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.WordsViewHol
             holder.textView_chinese.setVisibility(View.VISIBLE);
             holder.switch_chinese_invisible.setChecked(false);
         }
-        holder.switch_chinese_invisible.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                holder.textView_chinese.setVisibility(View.GONE);
-                word.setChineseInvisible(true);
-                wordViewModel.updateWords(word);
-            } else {
-                holder.textView_chinese.setVisibility(View.VISIBLE);
-                word.setChineseInvisible(false);
-                wordViewModel.updateWords(word);
-            }
-        });
     }
 
     @Override
