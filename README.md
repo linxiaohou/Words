@@ -1,0 +1,2 @@
+# Words
+安卓开发阶段综合，词汇记录小程序，练习使用room框架操作SQLite数据库以及使用RecyclerView进行数据的展示
