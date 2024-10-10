@@ -19,6 +19,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -62,8 +63,25 @@ public class WordsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         wordsAdapter1 = new WordsAdapter(false, wordViewModel);
         wordsAdapter2 = new WordsAdapter(true, wordViewModel);
+        recyclerView.setItemAnimator(new DefaultItemAnimator() {
+            @Override
+            public void onAnimationFinished(@NonNull RecyclerView.ViewHolder viewHolder) {
+                super.onAnimationFinished(viewHolder);
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (linearLayoutManager != null) {
+                    int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+                    int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
+                    for (int i = firstVisibleItemPosition; i <= lastVisibleItemPosition; i++) {
+                        WordsAdapter.WordsViewHolder wordsViewHolder = (WordsAdapter.WordsViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
+                        if (wordsViewHolder != null) {
+                            wordsViewHolder.textView_number.setText(String.valueOf(i + 1));
+                        }
+                    }
+                }
+            }
+        });
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(VIEW_TYPE_SHP, Context.MODE_PRIVATE);
-        Boolean viewType = sharedPreferences.getBoolean(IS_USING_CARD_VIEW, false);
+        boolean viewType = sharedPreferences.getBoolean(IS_USING_CARD_VIEW, false);
         if (viewType) {
             recyclerView.setAdapter(wordsAdapter2);
         } else {
@@ -72,11 +90,12 @@ public class WordsFragment extends Fragment {
         filteredWords = wordViewModel.getAllWordsLive();
         filteredWords.observe(requireActivity(), words -> {
             int temp = wordsAdapter1.getItemCount();
-            wordsAdapter1.setAllWords(words);
-            wordsAdapter2.setAllWords(words);
             if (temp != words.size()) {
-                wordsAdapter1.notifyDataSetChanged();
-                wordsAdapter2.notifyDataSetChanged();
+                recyclerView.smoothScrollBy(0, -200);
+                wordsAdapter1.submitList(words);
+                wordsAdapter2.submitList(words);
+                //wordsAdapter1.notifyDataSetChanged();
+                //wordsAdapter2.notifyDataSetChanged();
             }
         });
         floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton);
@@ -99,7 +118,7 @@ public class WordsFragment extends Fragment {
             builder.show();
         } else if (item.getItemId() == R.id.swtichViewType) {
             SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(VIEW_TYPE_SHP, Context.MODE_PRIVATE);
-            Boolean viewType = sharedPreferences.getBoolean(IS_USING_CARD_VIEW, false);
+            boolean viewType = sharedPreferences.getBoolean(IS_USING_CARD_VIEW, false);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             if (viewType) {
                 recyclerView.setAdapter(wordsAdapter1);
@@ -133,11 +152,11 @@ public class WordsFragment extends Fragment {
                     filteredWords = wordViewModel.getWordsByPattern(pattern);
                     filteredWords.observe(requireActivity(), words -> {
                         int temp = wordsAdapter1.getItemCount();
-                        wordsAdapter1.setAllWords(words);
-                        wordsAdapter2.setAllWords(words);
                         if (temp != words.size()) {
-                            wordsAdapter1.notifyDataSetChanged();
-                            wordsAdapter2.notifyDataSetChanged();
+                            wordsAdapter1.submitList(words);
+                            wordsAdapter2.submitList(words);
+                            //wordsAdapter1.notifyDataSetChanged();
+                            //wordsAdapter2.notifyDataSetChanged();
                         }
                     });
                     return true;

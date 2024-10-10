@@ -54,4 +54,10 @@ public class Word {
     public void setChineseMeaning(String chineseMeaning) {
         this.chineseMeaning = chineseMeaning;
     }
+
+    public boolean equals(Word word) {
+        return word.getEnglish().equals(this.english) &&
+                word.getChineseMeaning().equals(this.chineseMeaning) &&
+                word.getChineseInvisible().equals(this.chineseInvisible);
+    }
 }

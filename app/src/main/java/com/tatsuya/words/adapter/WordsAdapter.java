@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.materialswitch.MaterialSwitch;
@@ -15,26 +17,29 @@ import com.tatsuya.words.R;
 import com.tatsuya.words.entity.Word;
 import com.tatsuya.words.viewmodel.WordViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.WordsViewHolder> {
-    private List<Word> allWords = new ArrayList<>();
+public class WordsAdapter extends ListAdapter<Word, WordsAdapter.WordsViewHolder> {
     private final Boolean useCardView;
     private final WordViewModel wordViewModel;
 
     public WordsAdapter(Boolean useCardView, WordViewModel wordViewModel) {
+        super(new DiffUtil.ItemCallback<Word>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull Word oldItem, @NonNull Word newItem) {
+                return oldItem.getId() == newItem.getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(@NonNull Word oldItem, @NonNull Word newItem) {
+                return oldItem.equals(newItem);
+            }
+        });
         this.useCardView = useCardView;
         this.wordViewModel = wordViewModel;
     }
 
-    public void setAllWords(List<Word> allWords) {
-        this.allWords = allWords;
-    }
-
     public static class WordsViewHolder extends RecyclerView.ViewHolder {
-        TextView textView_number, textView_english, textView_chinese;
-        MaterialSwitch switch_chinese_invisible;
+        public TextView textView_number, textView_english, textView_chinese;
+        public MaterialSwitch switch_chinese_invisible;
 
         public WordsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,7 +84,7 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.WordsViewHol
 
     @Override
     public void onBindViewHolder(@NonNull WordsViewHolder holder, int position) {
-        Word word = allWords.get(position);
+        Word word = getItem(position);
         holder.itemView.setTag(R.id.word_for_view_holder, word);
         holder.textView_number.setText(String.valueOf(position + 1));
         holder.textView_english.setText(word.getEnglish());
@@ -94,7 +99,8 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.WordsViewHol
     }
 
     @Override
-    public int getItemCount() {
-        return allWords.size();
+    public void onViewAttachedToWindow(@NonNull WordsViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        holder.textView_number.setText(String.valueOf(holder.getAdapterPosition() + 1));
     }
 }
