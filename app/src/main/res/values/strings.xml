@@ -7,4 +7,9 @@
     <string name="english_word">English Word</string>
     <string name="chinese_word">Chinese Word</string>
     <string name="button_submit">Submit</string>
+    <string name="message_clearData">Clear Data</string>
+    <string name="message_switchViewType">Switch ViewType</string>
+    <string name="message_search">search</string>
+    <string name="message_OK">OK</string>
+    <string name="message_cancel">cancel</string>
 </resources>

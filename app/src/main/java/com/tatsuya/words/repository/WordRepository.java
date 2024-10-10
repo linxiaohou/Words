@@ -25,6 +25,11 @@ public class WordRepository {
         return allWordsLive;
     }
 
+    public LiveData<List<Word>> getWordsByPattern(String pattern) {
+        //添加通配符（SQL模糊查询）
+        return wordDao.getWordsByPattern("%" + pattern + "%");
+    }
+
     public void insetWords(Word... words) {
         new InsertAsyncTask(wordDao).execute(words);
     }

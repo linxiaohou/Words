@@ -23,6 +23,10 @@ public class WordViewModel extends AndroidViewModel {
         return wordRepository.getAllWordsLive();
     }
 
+    public LiveData<List<Word>> getWordsByPattern(String pattern) {
+        return wordRepository.getWordsByPattern(pattern);
+    }
+
     public void insetWords(Word... words) {
         wordRepository.insetWords(words);
     }
