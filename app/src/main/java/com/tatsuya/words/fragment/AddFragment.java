@@ -72,16 +72,13 @@ public class AddFragment extends Fragment {
         };
         editTextEnglish.addTextChangedListener(textWatcher);
         editTextChinese.addTextChangedListener(textWatcher);
-        buttonSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String english = editTextEnglish.getText().toString().trim();
-                String chinese = editTextChinese.getText().toString().trim();
-                Word word = new Word(english, chinese);
-                wordViewModel.insetWords(word);
-                NavController navController = Navigation.findNavController(v);
-                navController.navigateUp();
-            }
+        buttonSubmit.setOnClickListener(v -> {
+            String english = editTextEnglish.getText().toString().trim();
+            String chinese = editTextChinese.getText().toString().trim();
+            Word word = new Word(english, chinese);
+            wordViewModel.insetWords(word);
+            NavController navController = Navigation.findNavController(v);
+            navController.navigateUp();
         });
     }
 }

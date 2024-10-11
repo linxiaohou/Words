@@ -12,7 +12,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
-    private NavHostFragment navHostFragment;
     private NavController navController;
 
     @Override
@@ -25,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
         if (navHostFragment != null) {
             navController = navHostFragment.getNavController();
             NavigationUI.setupActionBarWithNavController(this, navController);

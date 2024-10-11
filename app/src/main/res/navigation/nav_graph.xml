@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/wordsFragment"
         android:name="com.tatsuya.words.fragment.WordsFragment"
-        android:label="Words"
+        android:label="@string/fragment_words"
         tools:layout="@layout/fragment_words">
         <action
             android:id="@+id/action_wordsFragment_to_addFragment"
@@ -18,6 +18,6 @@
     <fragment
         android:id="@+id/addFragment"
         android:name="com.tatsuya.words.fragment.AddFragment"
-        android:label="Add"
+        android:label="@string/fragment_add"
         tools:layout="@layout/fragment_add" />
 </navigation>

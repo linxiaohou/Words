@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">单词表</string>
+    <string name="button_add_message">添加</string>
+    <string name="add_word">添加单词</string>
+    <string name="english_word">英文单词</string>
+    <string name="chinese_word">汉语释义</string>
+    <string name="button_submit">添加</string>
+    <string name="message_clearData">清除数据</string>
+    <string name="message_switchViewType">切换视图</string>
+    <string name="message_search">搜索</string>
+    <string name="message_OK">好的</string>
+    <string name="message_cancel">取消</string>
+    <string name="message_deleted_a_word">删除了一个单词</string>
+    <string name="message_undo">撤销</string>
+    <string name="fragment_words">单词表</string>
+    <string name="fragment_add">添加</string>
+</resources>
